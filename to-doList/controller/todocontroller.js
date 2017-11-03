@@ -11,34 +11,46 @@ var todoSchema = new mongoose.Schema({
 
 // a to do model
 var Todo = mongoose.model('Todo',todoSchema);
-var itemOne = Todo({item:'get flowers'}).save(function(err){
-    if (err) throw err;
-    console.log('item saved');
-});
+// to add data via code
 
-var data = [
-    {item:'get milk'},
-    {item: 'walk dog'},
-    {item: 'start programming'}
-];
+// var itemOne = Todo({item:'get flowers'}).save(function(err){
+//     if (err) throw err;
+//     console.log('item saved');
+// });
+
+
+// var data = [
+//     {item:'get milk'},
+//     {item: 'walk dog'},
+//     {item: 'start programming'}
+// ];
+
 var urlencodedParser = bodyParser.urlencoded({extended:false});
 module.exports = function(app){
     
     app.get('/todo',function(req,res){
-        res.render('todo',{todos: data});
+        //get data from mongoDB
+        Todo.find({},function(err,data){
+            if(err) throw err;
+            res.render('todo',{todos:data});
+        });
+        // res.render('todo',{todos: data});
     });
 
     app.post('/todo',urlencodedParser,function(req,res){
-        data.push(req.body);
-        res.json(data);
+        // get data from the view and add it to database
+        var newTodo = Todo(req.body).save(function(err,data){
+            if (err)throw err;
+            res.json(data);
+        })
         // res.render('todo',{todos: data});
     });
 
     app.delete('/todo/:item',function(req,res){
-        data = data.filter(function(todo){
-            return todo.item.replace(/ /g, '-') !==req.params.item;
-        });
-        // res.render('todo',{todos:data});
-        res.json(data);
+        // delete requested item
+        Todo.find({item:req.params.item.replace(/\-/g," ")}).remove(function(err,data){
+            if (err) throw err;
+            res.json(data);
+        })
     })
 };
