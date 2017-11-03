@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>profile</title>
+    <link rel="stylesheet" href="assets/style.css">
+    
+    <!-- <style>
+        body{background: skyblue; font-family: Verdana, Geneva, Tahoma, sans-serif; color: #ffffff;}
+        p{text-align: center;text-transform: uppercase;letter-spacing :.2em;}
+    </style> -->
+</head>
+<body>
+    <% include partial/nav.ejs %>
+    <h1><p>profile page of id <%= person %> </p></h1>
+    <h2><strong>Age: <%= data.age %></strong></h2>
+    <h2><strong>Job: <%= data.job %></strong></h2>
+    <h2>Hobbies: </h2>
+    <ul>
+        <% data.hobbies.forEach(function(item){ %>
+        <li>
+             <%= item %>
+        </li>
+        <% }); %>
+    </ul>
+</body>
+</html>
